@@ -1,3 +1,173 @@
+/* *{
+  box-sizing: border-box;
+}
+
+.max-width{
+  width: 100%;
+}
+
+.container{
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  background-color: #3b4055;
+}
+
+.container-derecha{
+  display: flex;
+  flex-wrap: wrap;
+  flex: 4;
+  border: 1px solid rgb(255, 0, 191);
+}
+
+.panel{
+  background-color: #2b2f42;
+  min-width: 350px;
+  padding: 10px 0;
+  border: 1px solid rgb(51, 255, 0);
+  flex: 1;
+}
+
+.editor{
+  background-color: #3b4055;
+  padding: 10px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  border: 1px solid red;
+  min-width: 350px;
+}
+
+.editor input,
+.editor textarea{
+  padding: 10px;
+  width: 100%;
+}
+
+
+.preview{
+  flex: 1;
+  min-width: 250px;
+  background-color: #3b4055;
+  color: white;
+  padding: 10px;
+  border: 1px solid rgb(255, 238, 0);
+}
+
+.note{
+  color: white;
+  padding: 10px;
+  display: flex; 
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+
+.menu{
+  padding: 10px;
+  text-align: right;
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.btn{
+  background: #2b5b88;
+  border: none;
+  border-radius: 3px;
+  padding: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+.btn:hover{
+  background: #3d87cc;
+}
+
+
+.pinButton{
+  background: #2b5b88;
+  border: none;
+  border-radius: 3px;
+  padding: 5px;
+  color: white;
+  cursor: pointer;
+}
+.pinButton.active{
+  background-color: #3d87cc;
+}
+
+.pinButton:hover{
+  background-color: #3d87cc;
+}
+
+.activeNote{
+  background-color: #2084e2;
+}
+
+.editor-textarea{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content{
+  color: white;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+
+  outline: none;
+  border: none;
+
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.7;
+  font-size: 18px;
+  background-color: transparent;
+  resize: none;
+}
+
+.title{
+  color: white;
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+
+  border: none;
+  border-bottom: solid 2px #ccc;
+  margin-bottom: 20px;
+
+  font-size: 32px;
+  font-weight: bolder;
+  outline: none;
+
+  background-color: transparent;
+  width: 100%;
+  display: block;
+}
+
+.search{
+  color: white;
+  padding: 5px;
+  outline: none;
+  border-radius: 5px;
+  border: none;
+  width: 60%;
+  font-size: 16px;
+  background: #394168;
+
+}
+.search:focus{
+  background-color:transparent;
+  border: solid 1px #3f53b6;
+}
+
+.statusCodeContainer{
+  color: white;
+  height: 25px;
+} */
+
+
 .container{
   display: flex;
   height: 100vh;
