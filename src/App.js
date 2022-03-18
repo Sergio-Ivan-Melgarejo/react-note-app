@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import './App.css';
 
 import Editor from './components/Editor';
 import List from './components/List';
@@ -9,34 +10,44 @@ import Item from './components/Item';
 
 import uuid from "react-uuid";
 
-import './App.css';
+import useDocumentitle from './hook/Documentitle';
+import ItemsContext from "./components/Items-context"
+import StatusContext from "./components/status-context"
 
-const itemsInitial = [{
-  id:0,
-  title:"mi primera nota",
-  text:"# hola a todos",
-  pinned: false,
-  date: Date.now()
-},
-{
-  id:1,
-  title:"mi 2 notadddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-  text:"# hola a todos",
-  pinned: false,
-  date: Date.now()
-}]
+import {get,put,post} from "./lib/http"
 
 function App() {
-  const [items, setItems] = useState(itemsInitial)
+  const url = "http://localhost:3010/";
+
+  const [items, setItems] = useState([])
   const [copyItems, setCopyItems] = useState([])
   const [actualIndex, setActualIndex] = useState(-1)
 
+  const [lock, setLock] = useState(false)
+  const [status, setStatus] = useState(0)
+
+  useDocumentitle(copyItems[actualIndex]?.title, "Notes")
+
+  useEffect(() => {
+    getItems(url)
+  }, [])
+
+  async function getItems (url) {
+    let data = await get(url);
+    let res = getOrderedNotes(data);
+
+    setItems(res);
+    setCopyItems(res);
+
+    if(items.length > 0) setActualIndex(0)
+  }
+  
   const handleNew = ({title,text}) =>{
     const note = 
     {
       id: uuid(),
-      title:title || "",
-      text:text || "",
+      title:title || "sin titulo",
+      text:text || "sin texto",
       pinned: false,
       date: Date.now()
     }
@@ -48,6 +59,9 @@ function App() {
     let res = getOrderedNotes(notes)
 
     setItems(res)
+    setCopyItems(res)
+
+    post(`${url}new`, note)
   }
 
   const handlePinned = (item,i) =>{
@@ -59,6 +73,7 @@ function App() {
     let res = getOrderedNotes(notes);
 
     setItems(res)
+    setCopyItems(res)
 
     let index = res.findIndex(x => x.id === id);
     
@@ -95,7 +110,9 @@ function App() {
     notes[actualIndex].title = title;
 
     setItems(notes)
+    setCopyItems(notes)
   }
+
   function onChangeText(e){
     const text = e.target.value; 
     
@@ -103,15 +120,58 @@ function App() {
     notes[actualIndex].text = text;
 
     setItems(notes)
+    setCopyItems(notes)
+  }
+
+  function handleSearch(e){
+    const q = e.target.value;
+
+    if(q === "") setCopyItems([...items])
+    else {
+      let res = items.filter(x => x.title.indexOf(q) >= 0 || x.text.indexOf(q) >= 0);
+      
+      if(res.length === 0){
+        setActualIndex(-1)
+      }
+      else{
+        setCopyItems([...res]);
+        setActualIndex(0);
+      }
+    }
+  }
+
+  function autosave (){
+    if(!lock){
+      setLock(true);
+      setStatus(1);
+      setTimeout(()=>{
+        save();
+        setLock(false)
+      },3000)
+    }
+  }
+
+  async function save(){
+    const item = items[actualIndex];
+
+     await put(`${url}update`,item)
+
+    setStatus(2)
+
+    setTimeout(()=>{
+      setStatus(0)
+    },1000)
   }
 
   return (
     <div className="App container">
       <Panel >
-        <Menu handleNew={handleNew} />
+        <ItemsContext.Provider value={{onSearch:handleSearch,onNew:handleNew}}>
+          <Menu />
+        </ItemsContext.Provider>
         <List>
           {
-            items.map((item, i) => <Item 
+            copyItems.map((item, i) => <Item 
               key={item.id}
               actualIndex={actualIndex} 
               item={item} 
@@ -126,8 +186,10 @@ function App() {
         {
           actualIndex >= 0 ?
           <>
-            <Editor item={items[actualIndex]} onChangeTitle={onChangeTitle} onChangeText={onChangeText} />
-            <Preview text={items[actualIndex].text}/>
+            <StatusContext.Provider value={{status: status,autosave}}>
+              <Editor item={copyItems[actualIndex]} onChangeTitle={onChangeTitle} onChangeText={onChangeText} />
+            </StatusContext.Provider>
+            <Preview text={copyItems[actualIndex].text}/>
           </>
           : null
         }

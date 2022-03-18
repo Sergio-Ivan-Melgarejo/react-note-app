@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import ItemsContext from './Items-context'
 
-const Menu = ({handleNew}) => {
+const Menu = () => {
+    const context = useContext(ItemsContext)
+  
     return ( 
         <div className='menu'>
-            <input className='search' type="search" placeholder='search ... ' />
-            <input className='btn' type="button" value="nueva nota" onClick={handleNew} />
+            <input onChange={(e)=>context.onSearch(e)} className='search' type="search" placeholder='search ... ' />
+            <input onClick={(e)=>context.onNew(e)} className='btn' type="button" value="Nueva Nota" />
         </div>
     )
 }

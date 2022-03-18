@@ -6,7 +6,6 @@ const Item = ({item,handlePinned,index,actualIndex,handleSelectNote,key}) => {
     <div key={key} className={index === actualIndex ? "note activeNote" : 'note'} onClick={(e)=>handleSelectNote(item,e)}>
         <div>
             {item.title === "" ? "[Sin título]" : item.title.substring(0,20) + " ..." }
-            {index === actualIndex ? "igual" : 'no igual'}
         </div>
 
         <div>
